@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Registro</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; }
+        form { background: white; padding: 2em; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1 ); }
+        input { width: 100%; padding: 0.5em; margin-bottom: 1em; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 0.7em; border: none; background-color: #007BFF; color: white; border-radius: 4px; cursor: pointer; }
+        #mensagem { margin-top: 1em; text-align: center; }
+    </style>
+</head>
+<body>
+
+    <form id="meuFormulario">
+        <h3>Registrar Ponto</h3>
+        <label for="nome">Nome:</label>
+        <input type="text" id="nome" name="nome" required>
+
+        <label for="RE">RE:</label>
+        <input type="text" id="RE" name="RE" required>
+
+        <button type="submit">Enviar</button>
+
+        <div id="mensagem"></div>
+    </form>
+
+    <script>
+        // COLE A URL DO SEU APP DA WEB AQUI
+        const urlDoScript = 'https://script.google.com/macros/s/AKfycbz-u82BrzwioicHNPE7ywlMW8BLZRkgw1duVOfHFrOO87yf7jP9rbMd1_dwdZNNHd7P/exec';
+
+        const form = document.getElementById('meuFormulario');
+        const mensagemDiv = document.getElementById('mensagem');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); // Impede o recarregamento da página
+
+            mensagemDiv.textContent = 'Enviando...';
+
+            const agora = new Date();
+            const dataFormatada = agora.toLocaleDateString('pt-BR'); // Formato dd/mm/aaaa
+            const horarioFormatado = agora.toLocaleTimeString('pt-BR'); // Formato hh:mm:ss
+
+            const dados = {
+                nome: document.getElementById('nome').value,
+                RE: document.getElementById('RE').value,
+                data: dataFormatada,
+                horario: horarioFormatado
+            };
+
+            fetch(urlDoScript, {
+                method: 'POST',
+                mode: 'no-cors', // Necessário para evitar erros de CORS com o Google Scripts
+                cache: 'no-cache',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dados)
+            })
+            .then(res => {
+                 // Como estamos em modo 'no-cors', não conseguimos ler a resposta.
+                 // Apenas assumimos que foi um sucesso se não houver erro de rede.
+                mensagemDiv.textContent = 'Dados enviados com sucesso!';
+                mensagemDiv.style.color = 'green';
+                form.reset(); // Limpa o formulário
+            })
+            .catch(err => {
+                mensagemDiv.textContent = 'Ocorreu um erro ao enviar os dados.';
+                mensagemDiv.style.color = 'red';
+                console.error('Erro:', err);
+            });
+        });
+    </script>
+
+</body>
+</html>

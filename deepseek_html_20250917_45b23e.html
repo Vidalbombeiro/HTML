@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Escala DEJEM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #1a4b8c 0%, #2a6295 100%);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .card-title {
+            color: #1a4b8c;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eaeaea;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        button {
+            background: #1a4b8c;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #2a6295;
+        }
+        
+        button.secondary {
+            background: #4CAF50;
+        }
+        
+        button.secondary:hover {
+            background: #45a049;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            color: #1a4b8c;
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: #f5f7fa;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+        
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+        
+        .badge-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .priority-indicator {
+            height: 10px;
+            width: 100%;
+            background-color: #e9ecef;
+            border-radius: 5px;
+            margin-top: 5px;
+        }
+        
+        .priority-fill {
+            height: 100%;
+            border-radius: 5px;
+            background: linear-gradient(90deg, #4CAF50 0%, #FFC107 50%, #F44336 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Escala DEJEM Municipal</h1>
+            <p class="subtitle">Sistema de gerenciamento de escalas de trabalho para militares</p>
+        </header>
+        
+        <div class="alert alert-success" id="alertSuccess"></div>
+        <div class="alert alert-error" id="alertError"></div>
+        
+        <div class="grid">
+            <div>
+                <div class="card">
+                    <h2 class="card-title">Abrir Nova Escala para Inscrições</h2>
+                    <div class="form-group">
+                        <label for="dataEscala">Data da Escala:</label>
+                        <input type="date" id="dataEscala">
+                    </div>
+                    <div class="form-group">
+                        <label for="horarioEscala">Horário:</label>
+                        <select id="horarioEscala">
+                            <option value="06:00-14:00">06:00 às 14:00</option>
+                            <option value="14:00-22:00">14:00 às 22:00</option>
+                            <option value="22:00-06:00">22:00 às 06:00</option>
+                        </select>
+                    </div>
+                    <button onclick="abrirInscricoes()">Abrir para Inscrições</button>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-title">Escalas Abertas para Inscrição</h2>
+                    <table id="tabelaInscricoes">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Horário</th>
+                                <th>Inscritos</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Preenchido dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div>
+                <div class="card">
+                    <h2 class="card-title">Seleção Automática de Militar</h2>
+                    <div class="form-group">
+                        <label for="selecionarData">Selecionar Data:</label>
+                        <select id="selecionarData" onchange="carregarHorarios()">
+                            <option value="">Selecione uma data</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="selecionarHorario">Selecionar Horário:</label>
+                        <select id="selecionarHorario">
+                            <option value="">Selecione um horário</option>
+                        </select>
+                    </div>
+                    <button class="secondary" onclick="selecionarAutomaticamente()">Selecionar Automaticamente</button>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-title">Militares Cadastrados</h2>
+                    <table id="tabelaMilitares">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Anos de Polícia</th>
+                                <th>Escalas este mês</th>
+                                <th>Prioridade</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Preenchido dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="card">
+                    <h2 class="card-title">Escalados Confirmados</h2>
+                    <table id="tabelaEscalados">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Horário</th>
+                                <th>Militar</th>
+                                <th>Anos de Polícia</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Preenchido dinamicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados de exemplo (em uma aplicação real, viriam do Google Sheets)
+        let militares = [
+            { id: 1, nome: "Daniel Evangelista", anosPolicia: 15, escalasMes: 2 },
+            { id: 2, nome: "Tenente Oliveira", anosPolicia: 8, escalasMes: 1 },
+            { id: 3, nome: "Sargento Santos", anosPolicia: 12, escalasMes: 3 },
+            { id: 4, nome: "Cabo Pereira", anosPolicia: 5, escalasMes: 0 },
+            { id: 5, nome: "Soldado Costa", anosPolicia: 3, escalasMes: 2 },
+            { id: 6, nome: "Subtenente Almeida", anosPolicia: 20, escalasMes: 4 },
+            { id: 7, nome: "Primeiro Sargento Lima", anosPolicia: 18, escalasMes: 1 }
+        ];
+        
+        let escalasAbertas = [];
+        let escalasConfirmadas = [];
+        
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            atualizarTabelaMilitares();
+            
+            // Adicionar algumas escalas abertas de exemplo
+            escalasAbertas.push({
+                id: 1,
+                data: '2023-10-15',
+                horario: '06:00-14:00',
+                inscritos: [1, 3, 5] // IDs dos militares
+            });
+            
+            escalasAbertas.push({
+                id: 2,
+                data: '2023-10-16',
+                horario: '14:00-22:00',
+                inscritos: [2, 4, 6] // IDs dos militares
+            });
+            
+            atualizarTabelaInscricoes();
+            atualizarDropdownDatas();
+        });
+        
+        // Função para exibir alertas de sucesso
+        function mostrarSucesso(mensagem) {
+            const alert = document.getElementById('alertSuccess');
+            alert.textContent = mensagem;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Função para exibir alertas de erro
+        function mostrarErro(mensagem) {
+            const alert = document.getElementById('alertError');
+            alert.textContent = mensagem;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Função para abrir inscrições para uma nova escala
+        function abrirInscricoes() {
+            const data = document.getElementById('dataEscala').value;
+            const horario = document.getElementById('horarioEscala').value;
+            
+            if (!data) {
+                mostrarErro('Por favor, selecione uma data.');
+                return;
+            }
+            
+            // Verificar se já existe escala para esta data/horário
+            const existe = escalasAbertas.find(e => e.data === data && e.horario === horario);
+            if (existe) {
+                mostrarErro('Já existe uma escala aberta para esta data e horário.');
+                return;
+            }
+            
+            // Adicionar à lista de escalas abertas
+            const novoId = escalasAbertas.length > 0 ? Math.max(...escalasAbertas.map(e => e.id)) + 1 : 1;
+            escalasAbertas.push({
+                id: novoId,
+                data: data,
+                horario: horario,
+                inscritos: []
+            });
+            
+            mostrarSucesso('Inscrições abertas para ' + formatarData(data) + ' às ' + horario);
+            atualizarTabelaInscricoes();
+            atualizarDropdownDatas();
+        }
+        
+        // Atualizar tabela de inscrições abertas
+        function atualizarTabelaInscricoes() {
+            const tbody = document.querySelector('#tabelaInscricoes tbody');
+            tbody.innerHTML = '';
+            
+            escalasAbertas.forEach(escala => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${formatarData(escala.data)}</td>
+                    <td>${escala.horario}</td>
+                    <td>${escala.inscritos.length}</td>
+                    <td>
+                        <button onclick="inscreverMilitar(${escala.id})">Inscrever-se</button>
+                        <button onclick="verInscritos(${escala.id})">Ver Inscritos</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        // Atualizar dropdown de datas para seleção
+        function atualizarDropdownDatas() {
+            const select = document.getElementById('selecionarData');
+            select.innerHTML = '<option value="">Selecione uma data</option>';
+            
+            const datasUnicas = [...new Set(escalasAbertas.map(e => e.data))];
+            datasUnicas.forEach(data => {
+                const option = document.createElement('option');
+                option.value = data;
+                option.textContent = formatarData(data);
+                select.appendChild(option);
+            });
+        }
+        
+        // Carregar horários para a data selecionada
+        function carregarHorarios() {
+            const data = document.getElementById('selecionarData').value;
+            const select = document.getElementById('selecionarHorario');
+            select.innerHTML = '<option value="">Selecione um horário</option>';
+            
+            if (!data) return;
+            
+            const horarios = escalasAbertas.filter(e => e.data === data).map(e => e.horario);
+            horarios.forEach(horario => {
+                const option = document.createElement('option');
+                option.value = horario;
+                option.textContent = horario;
+                select.appendChild(option);
+            });
+        }
+        
+        // Função para seleção automática
+        function selecionarAutomaticamente() {
+            const data = document.getElementById('selecionarData').value;
+            const horario = document.getElementById('selecionarHorario').value;
+            
+            if (!data || !horario) {
+                mostrarErro('Por favor, selecione uma data e um horário.');
+                return;
+            }
+            
+            // Encontrar a escala aberta correspondente
+            const escala = escalasAbertas.find(e => e.data === data && e.horario === horario);
+            if (!escala) {
+                mostrarErro('Não há inscrições para esta data e horário.');
+                return;
+            }
+            
+            if (escala.inscritos.length === 0) {
+                mostrarErro('Não há militares inscritos para esta escala.');
+                return;
+            }
+            
+            // Obter informações completas dos militares inscritos
+            const inscritosCompletos = escala.inscritos.map(id => {
+                const militar = militares.find(m => m.id === id);
+                return {
+                    id: militar.id,
+                    nome: militar.nome,
+                    anosPolicia: militar.anosPolicia,
+                    escalasMes: militar.escalasMes
+                };
+            });
+            
+            // Ordenar por menos escalas e, em caso de empate, por mais tempo de polícia
+            inscritosCompletos.sort((a, b) => {
+                if (a.escalasMes !== b.escalasMes) {
+                    return a.escalasMes - b.escalasMes; // Menos escalas primeiro
+                } else {
+                    return b.anosPolicia - a.anosPolicia; // Mais antigo em caso de empate
+                }
+            });
+            
+            // Selecionar o primeiro da lista (mais prioritário)
+            const selecionado = inscritosCompletos[0];
+            
+            // Adicionar à escala confirmada
+            escalasConfirmadas.push({
+                data: data,
+                horario: horario,
+                militar: selecionado.nome,
+                militarId: selecionado.id,
+                anosPolicia: selecionado.anosPolicia
+            });
+            
+            // Atualizar contador de escalas do militar
+            const militarIndex = militares.findIndex(m => m.id === selecionado.id);
+            militares[militarIndex].escalasMes += 1;
+            
+            // Remover a escala das abertas
+            escalasAbertas = escalasAbertas.filter(e => !(e.data === data && e.horario === horario));
+            
+            mostrarSucesso(`Militar ${selecionado.nome} selecionado para a escala.`);
+            
+            // Atualizar as tabelas
+            atualizarTabelaInscricoes();
+            atualizarTabelaEscalados();
+            atualizarTabelaMilitares();
+            atualizarDropdownDatas();
+        }
+        
+        // Atualizar tabela de militares
+        function atualizarTabelaMilitares() {
+            const tbody = document.querySelector('#tabelaMilitares tbody');
+            tbody.innerHTML = '';
+            
+            // Ordenar militares por prioridade (menos escalas primeiro)
+            const militaresOrdenados = [...militares].sort((a, b) => {
+                if (a.escalasMes !== b.escalasMes) {
+                    return a.escalasMes - b.escalasMes;
+                } else {
+                    return b.anosPolicia - a.anosPolicia;
+                }
+            });
+            
+            militaresOrdenados.forEach(militar => {
+                const tr = document.createElement('tr');
+                
+                // Calcular valor de prioridade (0 a 100)
+                const maxEscalas = Math.max(...militares.map(m => m.escalasMes));
+                const prioridade = maxEscalas > 0 ? (1 - (militar.escalasMes / maxEscalas)) * 100 : 100;
+                
+                tr.innerHTML = `
+                    <td>${militar.nome}</td>
+                    <td>${militar.anosPolicia} anos</td>
+                    <td>${militar.escalasMes}</td>
+                    <td>
+                        <div class="priority-indicator">
+                            <div class="priority-fill" style="width: ${prioridade}%"></div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        // Atualizar tabela de escalados
+        function atualizarTabelaEscalados() {
+            const tbody = document.querySelector('#tabelaEscalados tbody');
+            tbody.innerHTML = '';
+            
+            escalasConfirmadas.forEach(escala => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${formatarData(escala.data)}</td>
+                    <td>${escala.horario}</td>
+                    <td>${escala.militar}</td>
+                    <td>${escala.anosPolicia} anos</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+        
+        // Função para inscrever militar (simulação)
+        function inscreverMilitar(escalaId) {
+            // Em uma aplicação real, isso seria feito pelo próprio militar
+            const escala = escalasAbertas.find(e => e.id === escalaId);
+            if (!escala) return;
+            
+            // Encontrar militar com menos escalas
+            const militarMenosEscalas = [...militares].sort((a, b) => a.escalasMes - b.escalasMes)[0];
+            
+            // Adicionar à lista de inscritos se ainda não estiver inscrito
+            if (!escala.inscritos.includes(militarMenosEscalas.id)) {
+                escala.inscritos.push(militarMenosEscalas.id);
+                mostrarSucesso(`${militarMenosEscalas.nome} inscrito na escala.`);
+                atualizarTabelaInscricoes();
+            } else {
+                mostrarErro('Militar já inscrito nesta escala.');
+            }
+        }
+        
+        // Função para visualizar inscritos (simulação)
+        function verInscritos(escalaId) {
+            const escala = escalasAbertas.find(e => e.id === escalaId);
+            if (!escala) return;
+            
+            let mensagem = `Inscritos para ${formatarData(escala.data)} ${escala.horario}:\n`;
+            escala.inscritos.forEach(id => {
+                const militar = militares.find(m => m.id === id);
+                mensagem += `- ${militar.nome} (${militar.anosPolicia} anos de polícia, ${militar.escalasMes} escalas este mês)\n`;
+            });
+            
+            alert(mensagem);
+        }
+        
+        // Função auxiliar para formatar data
+        function formatarData(dataString) {
+            const data = new Date(dataString);
+            return data.toLocaleDateString('pt-BR');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Abastecimento</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- 1. Adicionado o Widget de Identidade da Netlify --><script type="text/javascript" src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .table-container::-webkit-scrollbar { width: 8px; height: 8px; }
+        .table-container::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .table-container::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        .table-container::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        /* Estilos para os logos */
+        .logo-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem; /* Espaço abaixo dos logos */
+        }
+        .logo {
+            max-height: 80px; /* Ajuste conforme necessário */
+            width: auto;
+        }
+        @media (max-width: 640px) {
+            .logo {
+                max-height: 60px; /* Menor em telas pequenas */
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Contêiner para os logos --><div class="logo-container">
+            <img src="URL_DA_LOGO_PREFEITURA_IBITINGA" alt="Logo Prefeitura de Ibitinga" class="logo">
+            <img src="URL_DA_LOGO_BOMBEIROS_SP" alt="Logo Corpo de Bombeiros de SP" class="logo">
+        </div>
+
+        <!-- Seção de Autenticação (Gerida pelo Netlify Identity) --><div id="auth-section" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 mb-8 text-center">
+            <h1 class="text-2xl md:text-3xl font-bold mb-2">Controle de Abastecimento</h1>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">Para começar, por favor, faça login ou registe-se.</p>
+            <!-- O Netlify Identity Widget irá adicionar os botões de login aqui --><div data-netlify-identity-menu></div>
+        </div>
+
+        <!-- Seção de Conteúdo (oculta até a autenticação) --><div id="content-section" class="hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 mb-8">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4 text-center">Formulário de Abastecimento</h2>
+                <form id="supply-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div>
+                        <label for="data" class="block text-sm font-medium mb-1">Data</label>
+                        <input type="date" id="data" required class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="prefixo" class="block text-sm font-medium mb-1">Prefixo</label>
+                        <input type="text" id="prefixo" placeholder="Ex: 101" required class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="placa" class="block text-sm font-medium mb-1">Placa</label>
+                        <input type="text" id="placa" placeholder="Ex: ABC-1234" required class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="abastecedor" class="block text-sm font-medium mb-1">Quem Abasteceu</label>
+                        <input type="text" id="abastecedor" placeholder="Nome do motorista" required class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div>
+                        <label for="combustivel" class="block text-sm font-medium mb-1">Tipo de Combustível</label>
+                        <select id="combustivel" required class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="Gasolina">Gasolina</option>
+                            <option value="Etanol">Etanol</option>
+                            <option value="Diesel S10">Diesel S10</option>
+                            <option value="Diesel S500">Diesel S500</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="posto" class="block text-sm font-medium mb-1">Posto</label>
+                        <input type="text" id="posto" placeholder="Nome do posto" required class="w-full px-4 py-2 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    </div>
+                    <div class="md:col-span-2 lg:col-span-3 mt-4">
+                         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-transform transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Adicionar Registro
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8">
+                 <h2 class="text-2xl font-bold mb-4">Registros de Abastecimento</h2>
+                <div class="table-container overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                        <thead class="bg-gray-50 dark:bg-gray-700">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Data</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Prefixo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Placa</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Abastecedor</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Combustível</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Posto</th>
+                                <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="supply-table-body" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        </tbody>
+                    </table>
+                     <p id="no-data-message" class="text-center py-8 text-gray-500">A fazer login ou nenhum dado inserido ainda...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 2. Adicionados os scripts do Firebase --><script type="module">
+        // --- PASSO A PASSO DA CONFIGURAÇÃO ---
+
+        // PASSO 1: Configurar o Firebase
+        //    1. Vá para https://console.firebase.google.com/ e crie um novo projeto.
+        //    2. No seu projeto, clique no ícone da Web (</>) para adicionar uma nova aplicação web.
+        //    3. Dê um nome à sua aplicação e clique em "Registar aplicação".
+        //    4. O Firebase irá mostrar-lhe um objeto `firebaseConfig`. Copie esse objeto e cole-o abaixo, substituindo o objeto de exemplo.
+        //    5. Vá para "Firestore Database" no menu à esquerda, clique em "Criar base de dados", inicie em "modo de produção" e escolha uma localização.
+        //    6. Vá para a aba "Regras" e altere as regras para permitir leitura e escrita a utilizadores autenticados. Substitua as regras existentes por:
+        //       rules_version = '2';
+        //       service cloud.firestore {
+        //         match /databases/{database}/documents {
+        //           match /abastecimentos/{userId}/{supplyId} {
+        //             allow read, write, delete: if request.auth != null && request.auth.uid == userId;
+        //           }
+        //         }
+        //       }
+
+        const firebaseConfig = {
+            apiKey: "SUA_API_KEY",
+            authDomain: "SEU_AUTH_DOMAIN",
+            projectId: "SEU_PROJECT_ID",
+            storageBucket: "SEU_STORAGE_BUCKET",
+            messagingSenderId: "SEU_MESSAGING_SENDER_ID",
+            appId: "SEU_APP_ID"
+        };
+        
+        // PASSO 2: Configurar o Netlify
+        //    1. Crie uma conta em https://www.netlify.com/
+        //    2. Faça o deploy deste ficheiro HTML para um novo site no Netlify.
+        //    3. No seu site Netlify, vá para "Site settings" > "Identity".
+        //    4. Clique em "Enable Identity".
+        //    5. Em "Registration", pode definir o registo como "Open" ou "Invite only".
+        //    6. Em "External providers", pode adicionar logins com Google, GitHub, etc., se desejar.
+
+        // --- FIM DA CONFIGURAÇÃO ---
+        
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const form = document.getElementById('supply-form');
+        const tableBody = document.getElementById('supply-table-body');
+        const noDataMessage = document.getElementById('no-data-message');
+        const contentSection = document.getElementById('content-section');
+        const authSection = document.getElementById('auth-section');
+
+        let suppliesCollectionRef;
+        let unsubscribe; // Para parar de ouvir as atualizações quando o utilizador faz logout
+
+        function setupUI(user) {
+            if (user) {
+                // Utilizador autenticado
+                contentSection.classList.remove('hidden');
+                authSection.style.display = 'none'; // Esconde a seção de auth
+                
+                // Configurar referência da coleção do Firestore para o utilizador atual
+                suppliesCollectionRef = collection(db, 'abastecimentos', user.id, 'registros');
+                
+                // Escutar por mudanças em tempo real
+                const q = query(suppliesCollectionRef, orderBy("data", "desc"));
+                unsubscribe = onSnapshot(q, (snapshot) => {
+                    const supplies = [];
+                    snapshot.forEach(doc => {
+                        supplies.push({ ...doc.data(), id: doc.id });
+                    });
+                    renderTable(supplies);
+                }, (error) => {
+                    console.error("Erro ao carregar dados do Firestore: ", error);
+                    alert("Não foi possível carregar os dados. Verifique a configuração do Firebase e as regras de segurança.");
+                });
+
+            } else {
+                // Utilizador não autenticado
+                contentSection.classList.add('hidden');
+                authSection.style.display = 'block';
+                tableBody.innerHTML = '';
+                noDataMessage.textContent = "Por favor, faça login para ver os dados.";
+                noDataMessage.style.display = 'block';
+                // Para a escuta de atualizações se houver uma ativa
+                if (unsubscribe) unsubscribe();
+            }
+        }
+        
+        // Lógica de Autenticação Netlify
+        netlifyIdentity.on('init', user => {
+            setupUI(user);
+        });
+
+        netlifyIdentity.on('login', user => {
+            setupUI(user);
+            netlifyIdentity.close();
+        });
+
+        netlifyIdentity.on('logout', () => {
+            setupUI(null);
+        });
+
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            if (!data || data.length === 0) {
+                noDataMessage.style.display = 'block';
+                tableBody.style.display = 'none';
+                noDataMessage.textContent = "Nenhum dado inserido ainda.";
+            } else {
+                noDataMessage.style.display = 'none';
+                tableBody.style.display = '';
+                data.forEach(entry => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="px-6 py-4 whitespace-nowrap">${entry.data || ''}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${entry.prefixo || ''}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${entry.placa || ''}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${entry.abastecedor || ''}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${entry.combustivel || ''}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">${entry.posto || ''}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                            <button onclick="window.deleteEntry('${entry.id}')" class="text-red-600 hover:text-red-900">Excluir</button>
+                        </td>
+                    `;
+                    tableBody.appendChild(tr);
+                });
+            }
+        }
+        
+        async function addFirestoreEntry(entry) {
+             try {
+                await addDoc(suppliesCollectionRef, entry);
+                form.reset();
+            } catch (error) {
+                console.error("Erro ao adicionar registro: ", error);
+                alert("Não foi possível salvar o registro.");
+            }
+        }
+
+        window.deleteEntry = async (id) => {
+            if (!confirm(`Tem certeza que deseja excluir este registro?`)) {
+                return;
+            }
+            try {
+                const docRef = doc(db, suppliesCollectionRef.path, id);
+                await deleteDoc(docRef);
+            } catch(error) {
+                 console.error("Erro ao excluir registro: ", error);
+                 alert("Não foi possível excluir o registro.");
+            }
+        };
+
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newEntry = {
+                data: document.getElementById('data').value,
+                prefixo: document.getElementById('prefixo').value,
+                placa: document.getElementById('placa').value,
+                abastecedor: document.getElementById('abastecedor').value,
+                combustivel: document.getElementById('combustivel').value,
+                posto: document.getElementById('posto').value,
+            };
+            addFirestoreEntry(newEntry);
+        });
+
+    </script>
+</body>
+</html>
+```
+
+**Para que os logos apareçam:**
+
+1.  **Encontre os URLs dos logos:**
+    * Procure online pelos logos oficiais da "Prefeitura de Ibitinga" e do "Corpo de Bombeiros de SP".
+    * Clique com o botão direito na imagem e selecione "Copiar endereço da imagem" (ou similar) para obter o URL direto.
+2.  **Substitua os placeholders no código:**
+    * No HTML, localize:
+        ```html
+        <img src="URL_DA_LOGO_PREFEITURA_IBITINGA" alt="Logo Prefeitura de Ibitinga" class="logo">
+        <img src="URL_DA_LOGO_BOMBEIROS_SP" alt="Logo Corpo de Bombeiros de SP" class="logo">
+        
+

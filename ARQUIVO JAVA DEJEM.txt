@@ -1,0 +1,42 @@
+// JavaScript para enviar dados para o Google Sheets
+
+const form = document.getElementById('escalaForm');
+
+rm.addEventListener('submit', function(e) {
+
+e.preventDefault();
+
+const url = 'SUA_URL_DO_APPS_SCRIPT';
+
+const data {
+
+};
+
+nome: document.getElementById('nome').value,
+
+matricula: document.getElementById('matricula').value,
+
+data: document.getElementById('data').value,
+
+horario: document.getElementById('horario').value
+
+fetch(url, {
+
+method: 'POST',
+
+body: JSON.stringify(data)
+
+}).then(response => response.text())
+
+.then(result => {
+
+console.log(result);
+
+document.getElementById('successMessage').style.display =
+
+'block';
+
+});
+
+});
+
